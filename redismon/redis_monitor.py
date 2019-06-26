@@ -46,7 +46,7 @@ if __name__ == '__main__':
         db_list.append(line.strip())
     for db_info in db_list:
 #        host,port,password,endpoint,metric = db_info.split(',')
-        host,port,password = db_info.split(',')
+        host,port,_,password = db_info.split(',')
         endpoint = socket.gethostname()
         timestamp = int(time.time())
         step      = 60
