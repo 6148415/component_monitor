@@ -21,27 +21,41 @@ response = urllib2.urlopen(req)
 result = json.loads(response.read())
 
 
-print result
-
 
 if result['code'] == 0:
-    services = []
+    service_list = []
+    port_list = []
     for i in result['data']:    #把每个组件的端端口，管理用户和密码等信息写入到本地文件
         fname = i['fname']
-        fport = i['fport']
+        fport = str(i['fport'])
         fadmin_user = i['fadmin_user']
         fadmin_password = i['fadmin_password']
-        if fname not in services:
+        if fname not in service_list:
             cmd = "echo '127.0.0.1,%s,%s,%s' > %s/%smon/list.txt"%(fport, fadmin_user, fadmin_password, cur_dir, fname)
-            services.append(fname)
+            service_list.append(fname)
         else:
             cmd = "echo '127.0.0.1,%s,%s,%s' >> %s/%smon/list.txt"%(fport, fadmin_user, fadmin_password, cur_dir, fname)
         commands.getoutput(cmd)
 
 
         #同时把每个组件的监控加入到定时任务里
-        cmd = "echo '* * * * * root (cd %s/%smon && python %s_monitor.py list.txt' >/etc/cron.d/%s.cron"%(cur_dir, fname, fname, fname)
+        cmd = "echo '* * * * * root (cd %s/%smon && python %s_monitor.py list.txt)' >/etc/cron.d/%s.cron"%(cur_dir, fname, fname, fname)
+        print cmd
         commands.getoutput(cmd)
         
+
+        port_list.append(fport)
+
+
+    port_list = list(set(port_list))
+    cmd = "echo '%s' > %s/portmon/list.txt"%('\n'.join(port_list), cur_dir)
+    commands.getoutput(cmd)    
+    cmd = "echo '* * * * * root (cd %s/portmon && python port_monitor.py list.txt)' >/etc/cron.d/port.cron"%(cur_dir)
+    print cmd
+    commands.getoutput(cmd)
+
+
+
+
 
 
