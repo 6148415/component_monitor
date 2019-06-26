@@ -12,6 +12,15 @@ import fileinput
 
 #endpoint = socket.gethostname()
 
+#先判断nc命令有没有，没有则安装
+
+cmd = "which nc"
+ret = commands.getstatusoutput(cmd)
+if ret[0] != 0:
+    cmd = "yum install nc -y;apt-get install nc -y"
+
+    commands.getoutput(cmd)
+
 
 zk_list= []
 for line in fileinput.input():
