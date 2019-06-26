@@ -17,7 +17,8 @@ zk_list= []
 for line in fileinput.input():
     zk_list.append(line.strip())
 for zk_info in zk_list:
-    host,port = zk_info.split(',')
+    print zk_info.split(',')
+    host,port,_,_ = zk_info.split(',')
     endpoint = socket.gethostname()
 
     # stat 命令的结果处理
