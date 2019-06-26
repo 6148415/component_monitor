@@ -9,6 +9,7 @@ import socket
 import time  
 import json  
 import copy
+import urllib,urllib2
 
 class Resource():  
     def __init__(self, url):
@@ -74,10 +75,11 @@ class Resource():
         return json.dumps()
 
 def pull_data(datapoints):  
-    import requests
     print json.dumps(datapoints, indent=2)
-    r = requests.post(falcon_addr, data=json.dumps(datapoints))
-    print r.content
+    headers = {'Content-Type': 'application/json'}
+    request = urllib2.Request(url=falcon_addr, headers=headers, data=json.dumps(datapoints))
+    response = urllib2.urlopen(request)
+    print response.read()
 
 if __name__ == "__main__":  
     falcon_addr="http://127.0.0.1:1988/v1/push"

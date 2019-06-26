@@ -5,10 +5,10 @@ import json
 import time
 import re
 import redis
-import requests
 import fileinput
 import datetime
 import socket
+import urllib,urllib2
 
 class RedisMonitorInfo():
 
@@ -130,4 +130,7 @@ if __name__ == '__main__':
     
         load_data = redis_stat_list+redis_cmdstat_list
         print json.dumps(load_data,sort_keys=True,indent=4)
-        requests.post(open_falcon_api, data=json.dumps(load_data))
+        headers = {'Content-Type': 'application/json'}
+        request = urllib2.Request(url=open_falcon_api, headers=headers, data=json.dumps(load_data))
+        response = urllib2.urlopen(request)
+        print response.read()

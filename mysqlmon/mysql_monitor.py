@@ -8,7 +8,7 @@ import time
 import os
 import sys
 import fileinput
-import requests
+import urllib,urllib2
 import json
 import re
 import socket
@@ -155,4 +155,7 @@ if __name__ == '__main__':
             mysql_stat_list.append(falcon_format)
 
         print json.dumps(mysql_stat_list,sort_keys=True,indent=4)
-        requests.post(open_falcon_api, data=json.dumps(mysql_stat_list))
+        headers = {'Content-Type': 'application/json'}
+        request = urllib2.Request(url=open_falcon_api, headers=headers, data=json.dumps(mysql_stat_list))
+        response = urllib2.urlopen(request)
+        print response.read()

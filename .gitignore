@@ -1,1 +1,7 @@
 /*/list.txt
+*.pyc
+*.o
+*.swp
+*.swo
+*.iml
+*.idea
