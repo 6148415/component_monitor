@@ -8,10 +8,23 @@ import json
 import sys
 import os
 import commands
+from optparse import OptionParser
 
 cur_dir = os.path.dirname(os.path.abspath(__file__))
 
-url = 'http://127.0.0.1/api/getComponent'
+usage = '--url=xxx'
+optParser = OptionParser(usage=usage, version='1.0.0')
+optParser.add_option('-a', '--oms-addr', action='store', type="string", dest='oms_addr')
+option, args = optParser.parse_args()
+
+oms_addr = option.oms_addr
+if not oms_addr:
+    print '请指定--oms-addr'
+    sys.exit(1)
+
+
+url = 'http://%s/api/getComponent'%oms_addr
+#url = 'http://127.0.0.1/api/getComponent'
 paramers = {'hostname':socket.gethostname()}
 
 headers = {}
