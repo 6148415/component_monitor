@@ -49,9 +49,9 @@ class Resource():
         self.resources_d={
             'nginx.status.active':[self.get_ngx_active,'GAUGE'],
             'nginx.status.reading':[self.get_ngx_reading,'GAUGE'],
-            'nginx.status.requests':[self.get_ngx_requests,'COUNTER'],
-            'nginx.status.handled':[self.get_ngx_handled,'COUNTER'],
-            'nginx.status.accepts':[self.get_ngx_accepts,'COUNTER'],
+            'nginx.status.requests':[self.get_ngx_requests,'GAUGE'],
+            'nginx.status.handled':[self.get_ngx_handled,'GAUGE'],
+            'nginx.status.accepts':[self.get_ngx_accepts,'GAUGE'],
             'nginx.status.waiting':[self.get_ngx_waiting,'GAUGE'],
             'nginx.status.writing':[self.get_ngx_writing,'GAUGE'],
         }
