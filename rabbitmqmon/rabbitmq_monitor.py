@@ -70,6 +70,19 @@ for rbq_info in rbq_list:
                 q['value'] = 0
             p.append(q)
 
+
+
+    request = urllib2.Request("http://127.0.0.1:15672/api/nodes")	
+    request.add_header("Authorization", "Basic %s" % base64string)
+    result = urllib2.urlopen(request)
+    data = json.loads(result.read())	
+
+    mem_used = data[0]['mem_used']
+    mem_limit = data[0]['mem_limit']    
+    mem_used_rate = '%.2f'%(float(mem_used)/mem_limit*100)
+
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.mem_used_rate','tags':tag, 'value':mem_used_rate})
+
     print json.dumps(p, indent=4)
 
 
