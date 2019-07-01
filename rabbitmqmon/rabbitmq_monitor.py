@@ -80,10 +80,33 @@ for rbq_info in rbq_list:
     mem_used = data[0]['mem_used']
     mem_limit = data[0]['mem_limit']    
     mem_used_rate = '%.2f'%(float(mem_used)/mem_limit*100)
-
     p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.mem_used_rate','tags':tag, 'value':mem_used_rate})
 
+    proc_used = data[0]['proc_used']
+    proc_total = data[0]['proc_total']
+    proc_used_rate = '%.2f'%(float(proc_used)/proc_total*100)
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.proc_used_rate','tags':tag, 'value':proc_used_rate})
+
+
+    request = urllib2.Request("http://127.0.0.1:15672/api/overview")
+    request.add_header("Authorization", "Basic %s" % base64string)
+    result = urllib2.urlopen(request)
+    data = json.loads(result.read())
+
+    messages_total = data['queue_totals']['messages']
+    messages_ready = data['queue_totals']['queue_totals']
+    messages_unacknowledged = data['queue_totals']['messages_unacknowledged']
+    
+    channels = data['object_totals']['channels']
+    connections = data['object_totals']['connections'] 
+    consumers = data['object_totals']['consumers']
+    exchanges = data['object_totals']['exchanges']
+    queues = data['object_totals']['queues']
+
     print json.dumps(p, indent=4)
+
+
+
 
 
     method = "POST"
