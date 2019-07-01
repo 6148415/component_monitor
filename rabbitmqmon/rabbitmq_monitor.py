@@ -93,8 +93,9 @@ for rbq_info in rbq_list:
     result = urllib2.urlopen(request)
     data = json.loads(result.read())
 
+
     messages_total = data['queue_totals']['messages']
-    messages_ready = data['queue_totals']['queue_totals']
+    messages_ready = data['queue_totals']['messages_ready']
     messages_unacknowledged = data['queue_totals']['messages_unacknowledged']
     
     channels = data['object_totals']['channels']
