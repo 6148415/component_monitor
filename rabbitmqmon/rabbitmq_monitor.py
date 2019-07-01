@@ -104,10 +104,17 @@ for rbq_info in rbq_list:
     exchanges = data['object_totals']['exchanges']
     queues = data['object_totals']['queues']
 
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.aessages_total','tags':tag, 'value':messages_total})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.messages_ready','tags':tag, 'value':messages_ready})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.messages_unacknowledged','tags':tag, 'value':messages_unacknowledged})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.channels','tags':tag, 'value':channels})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.connections','tags':tag, 'value':connections})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.consumers','tags':tag, 'value':consumers})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.exchanges','tags':tag, 'value':exchanges})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.queues','tags':tag, 'value':queues})
+
+
     print json.dumps(p, indent=4)
-
-
-
 
 
     method = "POST"
