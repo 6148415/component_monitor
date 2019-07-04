@@ -69,6 +69,10 @@ if result['code'] == 0:
 
 
 
-
+    #安装python组件
+    if 'msyql' in service_list:
+        cmd = 'yum install python-devel -y;yum install mysql-devel -y;\
+            pip install MySQL-python -i  http://pypi.doubanio.com/simple --trusted-host pypi.doubanio.com'
+        os.system(cmd)
 
 
