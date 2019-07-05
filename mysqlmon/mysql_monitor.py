@@ -85,8 +85,8 @@ if __name__ == '__main__':
             ('Com_update','COUNTER'),
             ('Com_delete','COUNTER'),
             ('Com_replace','COUNTER'),
-            ('MySQL_QPS','COUNTER'),
-            ('MySQL_TPS','COUNTER'),
+            ('MySQL_QPS','GAUGE'),
+            ('MySQL_TPS','GAUGE'),
             ('ReadWrite_ratio','GAUGE'),
             ('Innodb_buffer_pool_read_requests','COUNTER'),
             ('Innodb_buffer_pool_reads','COUNTER'),
@@ -105,9 +105,9 @@ if __name__ == '__main__':
             ('Innodb_os_log_written','COUNTER'),
             ('Created_tmp_disk_tables','COUNTER'),
             ('Created_tmp_tables','COUNTER'),
-            ('Connections','COUNTER'),
+            ('Connections','GAUGE'),
             ('Innodb_log_waits','COUNTER'),
-            ('Slow_queries','COUNTER'),
+            ('Slow_queries','GAUGE'),
             ('Binlog_cache_disk_use','COUNTER')
         ]
 
