@@ -12,6 +12,7 @@ import socket
 
 open_falcon_api = 'http://127.0.0.1:1988/v1/push'
 endpoint = socket.gethostname()
+print endpoint
 step = 60
 ts = int(time.time())
 
@@ -55,3 +56,10 @@ for line in fileinput.input():
     p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'es.fs.used.percent','tags':tag, 'value':fs_used_percent}) 
     p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'es.nodes.cpu.percent','tags':tag, 'value':nodes_cpu_percent})  
     print json.dumps(p, indent=4)
+
+
+    headers = {'Content-Type': 'application/json'}
+    request = urllib2.Request(url=open_falcon_api, headers=headers, data=json.dumps(p))
+    response = urllib2.urlopen(request)
+    print response.read()
+
