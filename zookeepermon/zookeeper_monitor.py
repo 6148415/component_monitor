@@ -68,7 +68,7 @@ for zk_info in zk_list:
     for item in items:
         payload.append({
         "endpoint": endpoint,
-        "metric": item['name'],
+        "metric": item['name'].replace('_', '.'),
         "timestamp": int(time.time()),
         "step": 60,
         "value": locals()[item['name']],

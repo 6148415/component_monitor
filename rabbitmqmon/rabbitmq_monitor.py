@@ -80,13 +80,13 @@ for rbq_info in rbq_list:
     mem_used = data[0]['mem_used']
     mem_limit = data[0]['mem_limit']    
     mem_used_rate = '%.2f'%(float(mem_used)/mem_limit*100)
-    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.mem_used','tags':tag, 'value':mem_used})
-    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.mem_used_rate','tags':tag, 'value':mem_used_rate})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.mem.used','tags':tag, 'value':mem_used})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.mem.used.percent','tags':tag, 'value':mem_used_rate})
 
     proc_used = data[0]['proc_used']
     proc_total = data[0]['proc_total']
     proc_used_rate = '%.2f'%(float(proc_used)/proc_total*100)
-    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.proc_used_rate','tags':tag, 'value':proc_used_rate})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.proc.used.percent','tags':tag, 'value':proc_used_rate})
 
 
     request = urllib2.Request("http://127.0.0.1:15672/api/overview")
@@ -105,9 +105,9 @@ for rbq_info in rbq_list:
     exchanges = data['object_totals']['exchanges']
     queues = data['object_totals']['queues']
 
-    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.aessages_total','tags':tag, 'value':messages_total})
-    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.messages_ready','tags':tag, 'value':messages_ready})
-    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.messages_unacknowledged','tags':tag, 'value':messages_unacknowledged})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.maessages.total','tags':tag, 'value':messages_total})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.messages.ready','tags':tag, 'value':messages_ready})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.messages.unacknowledged','tags':tag, 'value':messages_unacknowledged})
     p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.channels','tags':tag, 'value':channels})
     p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.connections','tags':tag, 'value':connections})
     p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.consumers','tags':tag, 'value':consumers})

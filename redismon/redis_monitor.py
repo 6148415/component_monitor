@@ -64,7 +64,7 @@ if __name__ == '__main__':
             redis_cmdstat_dict[cmdkey] = cmdstat_info[cmdkey]['calls']
         for _key,_value in redis_cmdstat_dict.items():
             falcon_format = {
-                    'Metric': 'redis.%s' % (_key),
+                    'Metric': 'redis.%s' % (_key.replace('_','.')),
                     'Endpoint': endpoint,
                     'Timestamp': timestamp,
                     'Step': step,
@@ -118,7 +118,7 @@ if __name__ == '__main__':
                 except:
                     continue
             falcon_format = {
-                    'Metric': 'redis.%s' % (_key),
+                    'Metric': 'redis.%s' % (_key.replace('_','.')),
                     'Endpoint': endpoint,
                     'Timestamp': timestamp,
                     'Step': step,

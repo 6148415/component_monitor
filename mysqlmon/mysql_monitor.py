@@ -95,8 +95,8 @@ if __name__ == '__main__':
             ('Innodb_buffer_pool_pages_free','GAUGE'),
             ('Innodb_buffer_pool_pages_dirty','GAUGE'),
             ('Innodb_buffer_pool_pages_data','GAUGE'),
-            ('Bytes_received','COUNTER'),
-            ('Bytes_sent','COUNTER'),
+            ('MySQL_bytes_received','COUNTER'),
+            ('MySQL_bytes_sent','COUNTER'),
             ('Innodb_rows_deleted','COUNTER'),
             ('Innodb_rows_inserted','COUNTER'),
             ('Innodb_rows_read','COUNTER'),
@@ -105,7 +105,7 @@ if __name__ == '__main__':
             ('Innodb_os_log_written','COUNTER'),
             ('Created_tmp_disk_tables','COUNTER'),
             ('Created_tmp_tables','COUNTER'),
-            ('Connections','COUNTER'),
+            ('MySQL.Connections','COUNTER'),
             ('Innodb_log_waits','COUNTER'),
             ('Slow_queries','COUNTER'),
             ('Binlog_cache_disk_use','COUNTER')
@@ -130,7 +130,7 @@ if __name__ == '__main__':
                 _value = int(stat_info.get(_key,0))
 
             falcon_format = {
-                    'Metric': '%s' % (_key),
+                    'Metric': '%s' % (_key.replace('_', '.')),
                     'Endpoint': endpoint,
                     'Timestamp': timestamp,
                     'Step': step,
@@ -144,7 +144,7 @@ if __name__ == '__main__':
         for _key,_value in  engine_info.items():
             _key = "Undo_Log_Length"
             falcon_format = {
-                    'Metric': '%s' % (_key),
+                    'Metric': '%s' % (_key.replace('_', '.')),
                     'Endpoint': endpoint,
                     'Timestamp': timestamp,
                     'Step': step,
