@@ -12,7 +12,6 @@ for line in fileinput.input():
     rbq_list.append(line.strip())
 for rbq_info in rbq_list:
     host,port,username,password = rbq_info.split(',')
-    port = '1%s'%port    #rabbitmq的管理端口是在服务端口前加上1
     endpoint = socket.gethostname()
 
     step = 60
@@ -20,57 +19,12 @@ for rbq_info in rbq_list:
     keys = ('messages_ready', 'messages_unacknowledged')
     rates = ('ack', 'deliver', 'deliver_get', 'publish')
 
-    request = urllib2.Request("http://127.0.0.1:15672/api/queues")
     # see #issue4
-    base64string = base64.b64encode('admin:admin')
-    request.add_header("Authorization", "Basic %s" % base64string)   
-    result = urllib2.urlopen(request)
-    data = json.loads(result.read())
+    base64string = base64.b64encode('%s:%s'%(username, password))
     tag = 'rabbitmq=%s'%port
     #tag = sys.argv[1].replace('_',',').replace('.','=')
 
     p = []
-    for queue in data:
-        # ready and unack
-        msg_total = 0
-        for key in keys:
-            q = {}
-            q["endpoint"] = endpoint
-            q['timestamp'] = ts
-            q['step'] = step
-            q['counterType'] = "GAUGE"
-            q['metric'] = 'rabbitmq.%s' % key
-            q['tags'] = 'name=%s,%s' % (queue['name'],tag)
-            q['value'] = int(queue[key])
-            msg_total += q['value']
-            p.append(q)
-
-        # total
-        q = {}
-        q["endpoint"] = endpoint
-        q['timestamp'] = ts
-        q['step'] = step
-        q['counterType'] = "GAUGE"
-        q['metric'] = 'rabbitmq.messages_total'
-        q['tags'] = 'name=%s,%s' % (queue['name'],tag)
-        q['value'] = msg_total
-        p.append(q)
-        
-        # rates
-        for rate in rates:
-            q = {}
-            q["endpoint"] = endpoint
-            q['timestamp'] = ts
-            q['step'] = step
-            q['counterType'] = "GAUGE"
-            q['metric'] = 'rabbitmq.%s_rate' % rate
-            q['tags'] = 'name=%s,%s' % (queue['name'],tag)
-            try:
-                q['value'] = int(queue['message_stats']["%s_details" % rate]['rate'])
-            except:
-                q['value'] = 0
-            p.append(q)
-
 
 
     request = urllib2.Request("http://127.0.0.1:15672/api/nodes")	
@@ -106,7 +60,18 @@ for rbq_info in rbq_list:
     exchanges = data['object_totals']['exchanges']
     queues = data['object_totals']['queues']
 
-    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.maessages.total','tags':tag, 'value':messages_total})
+    ack_rate = data['message_stats']['ack_details']['rate']
+    deliver_rate = data['message_stats']['deliver_details']['rate']
+    deliver_get_rate = data['message_stats']['deliver_get_details']['rate']
+    deliver_no_ack_rate = data['message_stats']['deliver_no_ack_details']['rate']
+    get_rate = data['message_stats']['get_details']['rate']
+    get_no_ack_rate = data['message_stats']['get_no_ack_details']['rate']
+    publish_rate = data['message_stats']['publish_details']['rate']
+    redeliver_rate = data['message_stats']['redeliver_details']['rate']
+
+
+
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.messages.total','tags':tag, 'value':messages_total})
     p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.messages.ready','tags':tag, 'value':messages_ready})
     p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.messages.unacknowledged','tags':tag, 'value':messages_unacknowledged})
     p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.channels','tags':tag, 'value':channels})
@@ -115,6 +80,14 @@ for rbq_info in rbq_list:
     p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.exchanges','tags':tag, 'value':exchanges})
     p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.queues','tags':tag, 'value':queues})
 
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.ack.rate','tags':tag, 'value':ack_rate})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.deliver.rate','tags':tag, 'value':deliver_rate})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.deliver_get.rate','tags':tag, 'value':deliver_get_rate})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.deliver_no_ack.rate','tags':tag, 'value':deliver_no_ack_rate})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.get.rate','tags':tag, 'value':get_rate})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.get_no_ack.rate','tags':tag, 'value':get_no_ack_rate})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.publish.rate','tags':tag, 'value':publish_rate})
+    p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.redeliver.rate','tags':tag, 'value':redeliver_rate})
 
     print json.dumps(p, indent=4)
 
