@@ -12,6 +12,7 @@ for line in fileinput.input():
     rbq_list.append(line.strip())
 for rbq_info in rbq_list:
     host,port,username,password = rbq_info.split(',')
+    port = '1%s'%port    #rabbitmq的管理端口是在服务端口前加上1
     endpoint = socket.gethostname()
 
     step = 60
