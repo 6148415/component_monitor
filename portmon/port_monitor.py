@@ -36,7 +36,7 @@ if content:
             "step": 60,
             "value": value,
             "counterType": "GAUGE",
-            "tags": "port=%s"%port
+            "tags": "port=%s,project=oms"%port
         })
 
     request_url = 'http://127.0.0.1:1988/v1/push'
