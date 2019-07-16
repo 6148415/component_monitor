@@ -23,7 +23,7 @@ if content:
     for port in port_list:
         cmd = "netstat  -an |grep :%s |grep LIST |wc -l"%(port)
         result = commands.getoutput(cmd)
-        if int(result) >= 0:
+        if int(result) > 0:
             value = 1
         else:
             value = 0
