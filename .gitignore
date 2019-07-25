@@ -5,3 +5,4 @@
 *.swo
 *.iml
 *.idea
+/dockermon/log/*
