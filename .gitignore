@@ -6,3 +6,4 @@
 *.iml
 *.idea
 /dockermon/log/*
+/dockermon/test.txt
