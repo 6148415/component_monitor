@@ -7,3 +7,4 @@
 *.idea
 /dockermon/log/*
 /dockermon/test.txt
+/dockermon/containers.pkl
