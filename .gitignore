@@ -5,6 +5,7 @@
 *.swo
 *.iml
 *.idea
+!.gitkeep
 /dockermon/log/*.txt
 /dockermon/test.txt
 /dockermon/containers.pkl
