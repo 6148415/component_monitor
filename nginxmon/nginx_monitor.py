@@ -78,7 +78,7 @@ def pull_data(datapoints):
     print json.dumps(datapoints, indent=2)
     headers = {'Content-Type': 'application/json'}
     request = urllib2.Request(url=falcon_addr, headers=headers, data=json.dumps(datapoints))
-    response = urllib2.urlopen(request)
+    response = urllib2.urlopen(request, timeout=5)
     print response.read()
 
 if __name__ == "__main__":  

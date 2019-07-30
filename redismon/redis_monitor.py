@@ -132,5 +132,5 @@ if __name__ == '__main__':
         print json.dumps(load_data,sort_keys=True,indent=4)
         headers = {'Content-Type': 'application/json'}
         request = urllib2.Request(url=open_falcon_api, headers=headers, data=json.dumps(load_data))
-        response = urllib2.urlopen(request)
+        response = urllib2.urlopen(request, timeout=5)
         print response.read()

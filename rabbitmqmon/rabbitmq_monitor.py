@@ -100,7 +100,7 @@ for rbq_info in rbq_list:
     request.add_header("Content-Type",'application/json')
     request.get_method = lambda: method
     try:
-        connection = opener.open(request)
+        connection = opener.open(request, timeout=5)
     except urllib2.HTTPError,e:
         connection = e
 
