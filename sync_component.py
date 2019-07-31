@@ -38,6 +38,10 @@ result = json.loads(response.read())
 if result['code'] == 0:
     service_list = []
     port_list = []
+    #先清除/etc/corn.d目录下所有的cron文件
+    cmd = 'cd /etc/cron.d && find . -name "*.cron" |grep -v "ntp.cron" |xrags -i rm -rf {}'
+
+    commands.getoutput(cmd)
     for i in result['data']:    #把每个组件的端端口，管理用户和密码等信息写入到本地文件
         fname = i['fname']
         fport = str(i['fport'])
