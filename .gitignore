@@ -9,3 +9,8 @@
 /dockermon/log/*.txt
 /dockermon/test.txt
 /dockermon/containers.pkl
+
+/jmxmon/conf.properties
+/jmxmon/var
+/jmxmon/jmxmon.jvm.context.json
+
