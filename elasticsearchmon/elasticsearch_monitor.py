@@ -18,7 +18,7 @@ ts = int(time.time())
 
 for line in fileinput.input():
     host,port,_,_ = line.strip().split(',')
-    tag = 'elasticsearch=%s'%port
+    tag = 'elasticsearchport=%s'%port
     print "http://%s:%s/_cluster/stats?pretty"%(host, port) 
     request = urllib2.Request("http://%s:%s/_cluster/stats?pretty"%(host, port))
     result = urllib2.urlopen(request)

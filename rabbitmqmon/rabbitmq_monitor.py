@@ -21,7 +21,7 @@ for rbq_info in rbq_list:
 
     # see #issue4
     base64string = base64.b64encode('%s:%s'%(username, password))
-    tag = 'rabbitmq=%s'%port
+    tag = 'rabbitmqport=%s'%port
     #tag = sys.argv[1].replace('_',',').replace('.','=')
 
     p = []

@@ -73,7 +73,7 @@ for zk_info in zk_list:
         "step": 60,
         "value": locals()[item['name']],
         "counterType": item['type'],
-        "tags": "zookeeper=%s"%port
+        "tags": "zookeeperport=%s"%port
     })
     
     

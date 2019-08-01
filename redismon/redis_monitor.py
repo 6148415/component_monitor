@@ -52,7 +52,7 @@ if __name__ == '__main__':
         step      = 60
         falcon_type = 'COUNTER'
 #        tags      = "port=%s" %port
-        tags      = "redis=%s"%port
+        tags      = "redisport=%s"%port
     
         conn = RedisMonitorInfo(host,port,password)
     

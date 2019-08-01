@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+#上报进程状态的同时，还需要将容器信息写入到oms
 
 import urllib, urllib2
 import time

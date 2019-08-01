@@ -38,6 +38,7 @@ result = json.loads(response.read())
 if result['code'] == 0:
     service_list = []
     port_list = []
+    jmxport_list = []       #jmx端口需要特殊处理
     #先清除/etc/corn.d目录下所有的cron文件
     cmd = 'cd /etc/cron.d && find . -name "*.cron" |grep -v "ntp.cron" |xrags -i rm -rf {}'
 
@@ -47,6 +48,10 @@ if result['code'] == 0:
         fport = str(i['fport'])
         fadmin_user = i['fadmin_user']
         fadmin_password = i['fadmin_password']
+
+        if fname == 'jmx':
+            jmxport_list.append(fport)
+
         if fname not in service_list:
             cmd = "echo '127.0.0.1,%s,%s,%s' > %s/%smon/list.txt"%(fport, fadmin_user, fadmin_password, cur_dir, fname)
             service_list.append(fname)
@@ -74,6 +79,16 @@ if result['code'] == 0:
 
 
 
+    if jmxport_list:
+        jmxport_list = list(set(jmxport_list))
+        cmd = 'cd %s/jmxmon && cp -rf conf.example.properties conf.properties && sed -i "s/jmx.ports=/jmx.ports=%s/g" conf.properties && ./control restart'%(
+            cur_dir, ','.join(jmxport_list)
+        )
+        print cmd
+        commands.getoutput(cmd)
+        
+
+
     #安装python组件
     if 'msyql' in service_list:
         cmd = 'yum install python-devel -y;yum install mysql-devel -y;\
@@ -84,7 +99,7 @@ if result['code'] == 0:
 
 
 #########部署cadvisor#############
-
+#cadvisor一旦部署后会自动发现本机的docker服
 
 cmd = "netstat  -an |grep :%s |grep LIST |wc -l"%(18080)
 result = commands.getoutput(cmd)

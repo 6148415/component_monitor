@@ -65,7 +65,7 @@ class Resource():
                 t['counterType'] = self.resources_d[resource][1]
                 t['metric'] = resource
                 t['value']= self.resources_d[resource][0]()
-                t['tags'] = "nginx=80"
+                t['tags'] = "nginxport=80"
 
                 output.append(t)
 

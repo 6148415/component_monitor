@@ -72,7 +72,7 @@ if __name__ == '__main__':
         timestamp = int(time.time())
         step      = 60
 #        tags      = "port=%s" %port
-        tags      = "mysql=%s"%port
+        tags      = "mysqlport=%s"%port
         conn = MySQLMonitorInfo(host,int(port),user,password)
         stat_info = conn.stat_info()
         engine_info = conn.engine_info()
