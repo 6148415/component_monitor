@@ -36,7 +36,9 @@ f.close()
 
 cmd = " docker ps -a | awk '{if(NR>1) print $NF}'"
 
-ret = commands.getoutput(cmd)
+ret = commands.getstatusoutput(cmd)
+if ret[0] != 0:
+    sys.exit(1)
 container_list = ret.split()
 for docker_name in container_list:
     cmd = "docker inspect %s --format='{{ .State.Running}}'"%docker_name
