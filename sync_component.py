@@ -101,6 +101,12 @@ if result['code'] == 0:
 #########部署cadvisor#############
 #cadvisor一旦部署后会自动发现本机的docker服
 
+cmd = "docker"
+result = commands.getstatusoutput(cmd)
+if result[0] != 0:
+    sys.exit(1)
+
+
 cmd = "netstat  -an |grep :%s |grep LIST |wc -l"%(18080)
 result = commands.getoutput(cmd)
 if int(result) ==  0:
