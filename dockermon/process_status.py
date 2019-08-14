@@ -48,7 +48,8 @@ for docker_name in container_list:
     else:
         status = 0
     payload.append({
-        "endpoint" : '%s/%s'%(hostname, docker_name),
+        #"endpoint" : '%s/%s'%(hostname, docker_name),
+        "endpoint" : docker_name,
         "metric": "process.status",
         "timestamp": ts,
         "step": 60,
