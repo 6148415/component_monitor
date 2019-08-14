@@ -1,18 +1,24 @@
 #!/bin/env python
 #-*- coding:utf-8 -*-
 
-__author__ = 'iambocai'
+__author__ = 'lynzhang'
 
 import sys, urllib2, base64, json, time,socket
 import fileinput
+import os
+import sys
+cur_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(cur_dir)
+sys.path.append(root_dir)
+from common import get_local_ip
 
+endpoint = get_local_ip()
 
 rbq_list= []
 for line in fileinput.input():
     rbq_list.append(line.strip())
 for rbq_info in rbq_list:
     host,port,username,password = rbq_info.split(',')
-    endpoint = socket.gethostname()
 
     step = 60
     ts = int(time.time())

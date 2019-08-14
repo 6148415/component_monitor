@@ -1,6 +1,7 @@
 #!/bin/env python
 #-*- coding:utf-8 -*-
-
+import os
+import sys
 import json
 import time
 import fileinput
@@ -8,10 +9,13 @@ import datetime
 import urllib,urllib2
 import socket
 
-
+cur_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(cur_dir)
+sys.path.append(root_dir)
+from common import get_local_ip
 
 open_falcon_api = 'http://127.0.0.1:1988/v1/push'
-endpoint = socket.gethostname()
+endpoint = get_local_ip()
 print endpoint
 step = 60
 ts = int(time.time())

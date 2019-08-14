@@ -10,10 +10,15 @@ import time
 import json  
 import copy
 import urllib,urllib2
+cur_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(cur_dir)
+sys.path.append(root_dir)
+from common import get_local_ip
+
 
 class Resource():  
     def __init__(self, url):
-        self.host = socket.gethostname()
+        self.host = get_local_ip()
         self.url = url
 
     def get_ngx_active(self):

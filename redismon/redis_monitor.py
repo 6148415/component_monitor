@@ -9,6 +9,12 @@ import fileinput
 import datetime
 import socket
 import urllib,urllib2
+import os
+import sys
+cur_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(cur_dir)
+sys.path.append(root_dir)
+from common import get_local_ip
 
 class RedisMonitorInfo():
 
@@ -47,7 +53,7 @@ if __name__ == '__main__':
     for db_info in db_list:
 #        host,port,password,endpoint,metric = db_info.split(',')
         host,port,_,password = db_info.split(',')
-        endpoint = socket.gethostname()
+        endpoint = get_local_ip()
         timestamp = int(time.time())
         step      = 60
         falcon_type = 'COUNTER'

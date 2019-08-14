@@ -6,8 +6,15 @@ import  time
 import urllib, urllib2
 import commands
 import json
+import os
+import sys
+cur_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(cur_dir)
+sys.path.append(root_dir)
+from common import get_local_ip
 
-endpoint = socket.gethostname()
+
+endpoint = get_local_ip()
 
 with open('list.txt', 'r') as f:
     content = f.read().strip()

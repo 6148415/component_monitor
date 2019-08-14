@@ -12,6 +12,7 @@ from optparse import OptionParser
 import cPickle as p
 
 cur_dir = os.path.dirname(os.path.abspath(__file__))
+from common import get_local_ip
 
 usage = '--url=xxx'
 optParser = OptionParser(usage=usage, version='1.0.0')
@@ -26,7 +27,10 @@ if not oms_addr:
 
 url = 'http://%s/api/getComponent'%oms_addr
 #url = 'http://127.0.0.1/api/getComponent'
-paramers = {'hostname':socket.gethostname()}
+
+local_ip = get_local_ip(oms_addr)
+
+paramers = {'client_ip': local_ip}
 
 headers = {}
 data = urllib.urlencode(paramers)
