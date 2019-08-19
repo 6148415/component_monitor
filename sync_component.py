@@ -28,7 +28,7 @@ if not oms_addr:
 url = 'http://%s/api/getComponent'%oms_addr
 #url = 'http://127.0.0.1/api/getComponent'
 
-local_ip = get_local_ip(oms_addr)
+local_ip = get_local_ip()
 
 paramers = {'client_ip': local_ip}
 
