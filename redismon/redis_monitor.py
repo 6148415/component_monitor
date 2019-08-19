@@ -28,8 +28,8 @@ class RedisMonitorInfo():
             r = redis.Redis(host=self.host, port=self.port, password=self.password)
          except:
             r = redis.Redis(host=get_local_ip(), port=self.port, password=self.password)
-        stat_info = r.info()
-        return stat_info
+         stat_info = r.info()
+         return stat_info
 
     def cmdstat_info(self):
         try:
