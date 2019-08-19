@@ -26,12 +26,10 @@ class RedisMonitorInfo():
     def stat_info(self):
          try:
             r = redis.Redis(host=self.host, port=self.port, password=self.password)
-            stat_info = r.info()
-            return stat_info
-         except Exception, e:
-            print (datetime.datetime.now()).strftime("%Y-%m-%d %H:%M:%S")
-            print e
-            return dict()
+         except:
+            r = redis.Redis(host=get_local_ip(), port=self.port, password=self.password)
+        stat_info = r.info()
+        return stat_info
 
     def cmdstat_info(self):
         try:
