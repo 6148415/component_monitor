@@ -24,12 +24,14 @@ class RedisMonitorInfo():
         self.password = password
 
     def stat_info(self):
-         try:
+        try:
             r = redis.Redis(host=self.host, port=self.port, password=self.password)
-         except:
-            r = redis.Redis(host=get_local_ip(), port=self.port, password=self.password)
-         stat_info = r.info()
-         return stat_info
+            stat_info = r.info()
+            return stat_info
+        except Exception, e:
+            print (datetime.datetime.now()).strftime("%Y-%m-%d %H:%M:%S")
+            print e
+            return dict()
 
     def cmdstat_info(self):
         try:
@@ -65,7 +67,8 @@ if __name__ == '__main__':
         redis_cmdstat_list = []
         cmdstat_info = conn.cmdstat_info()
         for cmdkey in cmdstat_info:
-            redis_cmdstat_dict[cmdkey] = cmdstat_info[cmdkey]['calls']
+            print cmdstat_info[cmdkey]
+            redis_cmdstat_dict[cmdkey] = cmdstat_info[cmdkey].get('calls', 0)
         for _key,_value in redis_cmdstat_dict.items():
             falcon_format = {
                     'Metric': 'redis.%s' % (_key.replace('_','.')),
