@@ -12,21 +12,23 @@ import socket
 cur_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.dirname(cur_dir)
 sys.path.append(root_dir)
-from common import get_local_ip
 
 open_falcon_api = 'http://127.0.0.1:1988/v1/push'
-endpoint = get_local_ip()
-print endpoint
 step = 60
 ts = int(time.time())
 
 for line in fileinput.input():
     host,port,_,_ = line.strip().split(',')
+    endpoint = host
     tag = 'elasticsearchport=%s'%port
     print "http://%s:%s/_cluster/stats?pretty"%(host, port) 
     request = urllib2.Request("http://%s:%s/_cluster/stats?pretty"%(host, port))
-    result = urllib2.urlopen(request)
-    data = json.loads(result.read())
+    try:
+        result = urllib2.urlopen(request)
+        data = json.loads(result.read())
+    except Exception, e:
+        print e
+        continue
     p = []
     
     nodes_count_data = data['nodes']['count']['data']

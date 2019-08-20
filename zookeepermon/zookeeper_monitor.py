@@ -12,15 +12,9 @@ import fileinput
 cur_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.dirname(cur_dir)
 sys.path.append(root_dir)
-from common import get_local_ip
 
 
 
-endpoint = get_local_ip()
-
-#port = sys.argv[1]
-
-#endpoint = socket.gethostname()
 
 #先判断nc命令有没有，没有则安装
 
@@ -38,7 +32,7 @@ for line in fileinput.input():
 for zk_info in zk_list:
     print zk_info.split(',')
     host,port,_,_ = zk_info.split(',')
-
+    endpoint = host
     # stat 命令的结果处理
     zookeeper_stat_received = commands.getoutput("echo stat | nc %s %s | grep \"Received:\" | awk '{print $2}'"%(host,port))
     zookeeper_stat_sent = commands.getoutput("echo stat | nc %s %s | grep \"Sent:\" | awk '{print $2}'"%(host,port))

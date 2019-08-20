@@ -14,7 +14,6 @@ import sys
 cur_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.dirname(cur_dir)
 sys.path.append(root_dir)
-from common import get_local_ip
 
 class RedisMonitorInfo():
 
@@ -28,8 +27,7 @@ class RedisMonitorInfo():
             r = redis.Redis(host=self.host, port=self.port, password=self.password)
             stat_info = r.info()
         except Exception, e:
-            r = redis.Redis(host=get_local_ip(), port=self.port, password=self.password)		
-            stat_info = r.info()
+            stat_info = {}
         return stat_info  
 
 
@@ -39,8 +37,7 @@ class RedisMonitorInfo():
             cmdstat_info = r.info('Commandstats')
 
         except Exception, e:
-            r = redis.Redis(host=get_local_ip(), port=self.port, password=self.password)  
-            cmdstat_info = r.info('Commandstats')
+            cmdstat_info = {}
         return cmdstat_info	
 
 
@@ -54,7 +51,7 @@ if __name__ == '__main__':
     for db_info in db_list:
 #        host,port,password,endpoint,metric = db_info.split(',')
         host,port,_,password = db_info.split(',')
-        endpoint = get_local_ip()
+        endpoint = host
         timestamp = int(time.time())
         step      = 60
         falcon_type = 'COUNTER'

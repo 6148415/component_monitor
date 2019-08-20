@@ -10,15 +10,14 @@ import sys
 cur_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.dirname(cur_dir)
 sys.path.append(root_dir)
-from common import get_local_ip
 
-endpoint = get_local_ip()
 
 rbq_list= []
 for line in fileinput.input():
     rbq_list.append(line.strip())
 for rbq_info in rbq_list:
     host,port,username,password = rbq_info.split(',')
+    endpoint = host
 
     step = 60
     ts = int(time.time())
@@ -33,7 +32,7 @@ for rbq_info in rbq_list:
     p = []
 
 
-    request = urllib2.Request("http://127.0.0.1:15672/api/nodes")	
+    request = urllib2.Request("http://%s:15672/api/nodes"%host)	
     request.add_header("Authorization", "Basic %s" % base64string)
     result = urllib2.urlopen(request)
     data = json.loads(result.read())	
@@ -50,7 +49,7 @@ for rbq_info in rbq_list:
     p.append({'endpoint':endpoint, 'timestamp':ts, 'step':step, 'counterType':'GAUGE', 'metric':'rabbitmq.proc.used.percent','tags':tag, 'value':proc_used_rate})
 
 
-    request = urllib2.Request("http://127.0.0.1:15672/api/overview")
+    request = urllib2.Request("http://%s:15672/api/overview"%host)
     request.add_header("Authorization", "Basic %s" % base64string)
     result = urllib2.urlopen(request)
     data = json.loads(result.read())

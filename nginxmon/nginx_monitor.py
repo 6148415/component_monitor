@@ -5,6 +5,7 @@ import os,sys
 import os.path  
 from os.path import isfile  
 from traceback import format_exc  
+import fileinput
 import socket  
 import time  
 import json  
@@ -13,13 +14,12 @@ import urllib,urllib2
 cur_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.dirname(cur_dir)
 sys.path.append(root_dir)
-from common import get_local_ip
-
 
 class Resource():  
-    def __init__(self, url):
-        self.host = get_local_ip()
-        self.url = url
+    def __init__(self, host, port):
+        self.host = host
+        self.port = port
+        self.url = "http://%s:%s/monitor/nginx_status"%(self.host, self.port)
 
     def get_ngx_active(self):
         cmd="/usr/bin/curl %s 2>/dev/null| grep 'Active' | awk '{print $NF}'" % self.url
@@ -88,7 +88,13 @@ def pull_data(datapoints):
 
 if __name__ == "__main__":  
     falcon_addr="http://127.0.0.1:1988/v1/push"
-    ngx_status_url="http://127.0.0.1/monitor/nginx_status"
-    d = Resource(ngx_status_url).run()
-    if d:
-        pull_data(d)
+    db_list= []
+    for line in fileinput.input():
+        db_list.append(line.strip())
+    for db_info in db_list:
+#        host,port,password,endpoint,metric = db_info.split(',')
+        host,port = db_info.split(',')
+        ngx_status_url="http://127.0.0.1/monitor/nginx_status"
+        d = Resource(host, port).run()
+        if d:
+            pull_data(d)
