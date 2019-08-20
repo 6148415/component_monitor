@@ -34,6 +34,11 @@ f = file('%s/containers.pkl'%cur_dir)
 containers = p.load(f)
 f.close() 
 
+cmd = " docker ps -a"
+ret = commands.getstatusoutput(cmd)
+if ret[0] != 0:
+    sys.exit(1)
+
 cmd = " docker ps -a | awk '{if(NR>1) print $NF}'"
 
 ret = commands.getstatusoutput(cmd)
