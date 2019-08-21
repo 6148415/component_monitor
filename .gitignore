@@ -11,6 +11,7 @@
 /dockermon/containers.pkl
 
 /jmxmon/conf.properties
+/jmxmon/conf.properties.*
 /jmxmon/var
 /jmxmon/jmxmon.jvm.context.json
 
