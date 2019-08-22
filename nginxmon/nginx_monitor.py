@@ -11,7 +11,6 @@ import time
 import json  
 import copy
 import urllib,urllib2
-import requests
 cur_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.dirname(cur_dir)
 sys.path.append(root_dir)
@@ -21,11 +20,12 @@ class Resource():
         self.host = host
         self.port = port
         self.url = "http://%s:%s/monitor/nginx_status"%(self.host, self.port)
-        r = requests.get(self.url, timeout=10) 
-        if r.status_code == 200:
-            self.response = r.content
+        req = urllib2.Request(self.url) 
+        resp = urllib2.urlopen(req, timeout=10)
+        if resp.code == 200:
+            self.response = resp.read().strip()
         else:
-            raise Exception(r.content)
+            raise Exception(resp.read().strip())
         
 
 
