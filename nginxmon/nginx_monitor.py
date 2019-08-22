@@ -11,6 +11,7 @@ import time
 import json  
 import copy
 import urllib,urllib2
+import requests
 cur_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.dirname(cur_dir)
 sys.path.append(root_dir)
@@ -20,35 +21,54 @@ class Resource():
         self.host = host
         self.port = port
         self.url = "http://%s:%s/monitor/nginx_status"%(self.host, self.port)
+        r = requests.get(self.url, timeout=10) 
+        if r.status_code == 200:
+            self.response = r.content
+        else:
+            raise Exception(r.content)
+        
+
 
     def get_ngx_active(self):
-        cmd="/usr/bin/curl %s 2>/dev/null| grep 'Active' | awk '{print $NF}'" % self.url
-        return os.popen(cmd).read().strip("\n")
+        data = self.response.strip().split('\n')
+        return data[0].split(':')[1].strip()
 
     def get_ngx_reading(self):
-        cmd="/usr/bin/curl %s 2>/dev/null| grep 'Reading' | awk '{print $2}'" % self.url
-        return os.popen(cmd).read().strip("\n")
+        data = self.response.strip().split('\n')
+        data = data[3]    #'Reading: 0 Writing: 1 Waiting: 0'
+        data = data.split() #['Reading:', '0', 'Writing:', '1', 'Waiting:', '0']
+        return data[1]
 
     def get_ngx_writing(self):
-        cmd="/usr/bin/curl %s 2>/dev/null| grep 'Writing' | awk '{print $4}'" % self.url
-        return os.popen(cmd).read().strip("\n")
+        data = self.response.strip().split('\n')
+        data = data[3]    #'Reading: 0 Writing: 1 Waiting: 0'
+        data = data.split() #['Reading:', '0', 'Writing:', '1', 'Waiting:', '0']
+        return data[3]
 
     def get_ngx_waiting(self):
-        cmd="/usr/bin/curl %s 2>/dev/null| grep 'Waiting' | awk '{print $6}'" % self.url
-        return os.popen(cmd).read().strip("\n")
+        data = self.response.strip().split('\n')
+        data = data[3]    #'Reading: 0 Writing: 1 Waiting: 0'
+        data = data.split() #['Reading:', '0', 'Writing:', '1', 'Waiting:', '0']
+        return data[5]
 
     def get_ngx_accepts(self):
-        cmd="/usr/bin/curl %s 2>/dev/null| awk NR==3 | awk '{print $1}'" % self.url
-        return os.popen(cmd).read().strip("\n")
+        data = self.response.strip().split('\n')
+        data = data[2]    #' 61 61 60 '
+        data = data.split()  #['61', '61', '60']
+        return data[0]  
 
     def get_ngx_handled(self):
-        cmd="/usr/bin/curl %s 2>/dev/null| awk NR==3 | awk '{print $2}'" % self.url
-        return os.popen(cmd).read().strip("\n")
+        data = self.response.strip().split('\n')
+        data = data[2]    #' 61 61 60 '
+        data = data.split()  #['61', '61', '60']
+        return data[1]
 
     def get_ngx_requests(self):
-        cmd="/usr/bin/curl %s 2>/dev/null| awk NR==3 | awk '{print $3}'" % self.url
-        return os.popen(cmd).read().strip("\n")
 
+        data = self.response.strip().split('\n')
+        data = data[2]    #' 61 61 60 '
+        data = data.split()  #['61', '61', '60']
+        return data[2]
 
     def run(self):
         self.resources_d={
@@ -93,7 +113,7 @@ if __name__ == "__main__":
         db_list.append(line.strip())
     for db_info in db_list:
 #        host,port,password,endpoint,metric = db_info.split(',')
-        host,port = db_info.split(',')
+        host,port,_,_ = db_info.split(',')
         ngx_status_url="http://127.0.0.1/monitor/nginx_status"
         d = Resource(host, port).run()
         if d:
