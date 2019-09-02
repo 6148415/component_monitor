@@ -16,7 +16,7 @@ sys.path.append(root_dir)
 
 def check_port(host, port):
     sk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sk.settimeout(1)
+    sk.settimeout(5)
     try:
         sk.connect((host, port))
         result = True
