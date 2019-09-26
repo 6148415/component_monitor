@@ -39,7 +39,7 @@ if result['code'] == 0:
     service_list = []
     jmx_info = {}
     #先清除/etc/corn.d目录下所有的cron文件
-    cmd = 'cd /etc/cron.d && find . -name "*.cron" |grep -v "ntp.cron" |xargs -i rm -rf {}'
+    cmd = 'cd /etc/cron.d && find . -name "*.cron" |grep -v "ntp.cron" |grep -v "docker.cron" |xargs -i rm -rf {}'
     commands.getoutput(cmd)
     #清空端口列表文件
     cmd = 'cd %s/portmon && rm -rf list.txt'%cur_dir
